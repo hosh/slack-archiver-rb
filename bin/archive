@@ -10,10 +10,20 @@ class SlackArchiverCLI < Thor
   desc "list", "list channels"
   def list
     config
-    ap Slack.channels_list
+    r = Slack.channels_list
+    error_and_exit(r) unless r['ok']
+    r['channels'].each do |channel|
+      puts "#{channel['id']} ##{channel['name']}"
+    end
   end
 
   private
+
+  def error_and_exit(r)
+    puts "Error connecting with slack"
+    ap r
+    exit(1)
+  end
 
   def config
     @config ||= SlackArchiver::Config.
