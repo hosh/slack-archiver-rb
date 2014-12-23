@@ -1,3 +1,4 @@
+/.slack_token
 *.gem
 *.rbc
 /.config
