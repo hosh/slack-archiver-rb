@@ -1,0 +1,3 @@
+#!/bin/sh
+
+docker run -v ~/.slack_token:/.slack_token -v ${PWD}/data:/data -t hosh/slack-archiver
