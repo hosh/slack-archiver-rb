@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+$LOAD_PATH.unshift File.expand_path(File.join(__FILE__, '../../lib'))
+
+require 'thor'
+require 'ap'
+require 'slack'
+require 'slack-archiver/config'
+
+class SlackArchiverCLI < Thor
+  desc "list", "list channels"
+  def list
+    config
+    ap Slack.channels_list
+  end
+
+  private
+
+  def config
+    @config ||= SlackArchiver::Config.
+      new(base_dir: File.expand_path(File.join(__FILE__, '../..'))).
+      tap do |_config|
+        Slack.configure do |slack_config|
+          slack_config.token = _config.api_token
+        end
+    end
+  end
+end
+
+SlackArchiverCLI.start(ARGV)

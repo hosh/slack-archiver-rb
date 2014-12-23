@@ -1,3 +1,5 @@
+require 'rlet'
+
 module SlackArchiver
   class Config
     include Let
