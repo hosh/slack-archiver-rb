@@ -5,6 +5,7 @@ require 'thor'
 require 'ap'
 require 'slack'
 require 'slack-archiver/config'
+require 'slack-archiver/channel_history'
 
 class SlackArchiverCLI < Thor
   desc "list", "list channels"
@@ -15,6 +16,19 @@ class SlackArchiverCLI < Thor
     r['channels'].each do |channel|
       puts "#{channel['id']} ##{channel['name']}"
     end
+  end
+
+  desc "oldest CHANNEL", "oldest message (use channel id)"
+  def oldest(channel)
+    config
+    c = SlackArchiver::ChannelHistory.new(channel_id: channel, count: 1, latest: '0')
+    error_and_exit(c.response) unless c.ok?
+    #ap [:oldest, c.datetime.(c.latest)]
+    ap c.response
+  end
+
+  desc "download CHANNEL", "archives a channel (use channel id)"
+  def download(channel)
   end
 
   private
